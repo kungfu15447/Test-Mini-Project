@@ -18,6 +18,10 @@ namespace HotelBooking.Core
 
         public bool CreateBooking(Booking booking)
         {
+            if (booking is null)
+            {
+                throw new ArgumentException("Booking is null");
+            }
             int roomId = FindAvailableRoom(booking.StartDate, booking.EndDate);
 
             if (roomId >= 0)
