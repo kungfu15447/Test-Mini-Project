@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using HotelBooking.Application.Customers.Facade;
 using HotelBooking.Core;
 using Microsoft.AspNetCore.Mvc;
@@ -22,6 +23,19 @@ namespace HotelBooking.WebApi.Controllers
         public IEnumerable<Customer> Get()
         {
             return _customerService.GetAll();
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult Get(int id)
+        {
+            try
+            {
+                var customer = _customerService.Get(id);
+                return new OkObjectResult(customer);
+            }catch(ArgumentException ex)
+            {
+                return new BadRequestObjectResult(ex.Message);
+            }
         }
 
     }

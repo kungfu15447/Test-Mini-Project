@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using HotelBooking.Application.Common.Facade;
 using HotelBooking.Application.Customers.Facade;
 using HotelBooking.Core;
@@ -15,12 +16,18 @@ namespace HotelBooking.Application.Customers
 
         public void Add(Customer customer)
         {
-            throw new System.NotImplementedException();
+            _customerRepo.Add(customer);
         }
 
         public Customer Get(int id)
         {
-            throw new System.NotImplementedException();
+            var customer = _customerRepo.Get(id);
+
+            if (customer == null)
+            {
+                throw new ArgumentException("Could not find customer in database");
+            }
+            return customer;
         }
 
         public IEnumerable<Customer> GetAll()
