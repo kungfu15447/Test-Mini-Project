@@ -37,12 +37,12 @@ namespace HotelBooking.Application.Customers
 
         public void Remove(int id)
         {
-            throw new System.NotImplementedException();
+            _customerRepo.Remove(id);
         }
 
         public void Update(Customer customer)
         {
-            throw new System.NotImplementedException();
+            _customerRepo.Edit(customer);
         }
     }
 }
