@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace HotelBooking.Core
+namespace HotelBooking.Application.Common.Facade
 {
     public interface IRepository<T>
     {

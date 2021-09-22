@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using HotelBooking.Application.Bookings.Facade;
 using HotelBooking.Core;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,17 +10,10 @@ namespace HotelBooking.WebApi.Controllers
     [Route("[controller]")]
     public class BookingsController : Controller
     {
-        private IRepository<Booking> bookingRepository;
-        private IRepository<Customer> customerRepository;
-        private IRepository<Room> roomRepository;
         private IBookingManager bookingManager;
 
-        public BookingsController(IRepository<Booking> bookingRepos, IRepository<Room> roomRepos,
-            IRepository<Customer> customerRepos, IBookingManager manager)
+        public BookingsController(IBookingManager manager)
         {
-            bookingRepository = bookingRepos;
-            roomRepository = roomRepos;
-            customerRepository = customerRepos;
             bookingManager = manager;
         }
 
@@ -27,24 +21,25 @@ namespace HotelBooking.WebApi.Controllers
         [HttpGet(Name = "GetBookings")]
         public IEnumerable<Booking> Get()
         {
-            return bookingRepository.GetAll();
+            return bookingManager.GetAll();
         }
 
         // GET api/bookings/5
         [HttpGet("{id}", Name = "GetBooking")]
         public IActionResult Get(int id)
         {
-            var item = bookingRepository.Get(id);
+            var item = bookingManager.Get(id);
             if (item == null)
             {
                 return NotFound();
             }
+
             return new ObjectResult(item);
         }
 
         // POST api/bookings
         [HttpPost]
-        public IActionResult Post([FromBody]Booking booking)
+        public IActionResult Post([FromBody] Booking booking)
         {
             if (booking == null)
             {
@@ -61,19 +56,18 @@ namespace HotelBooking.WebApi.Controllers
             {
                 return Conflict("The booking could not be created. All rooms are occupied. Please try another period.");
             }
-
         }
 
         // PUT api/bookings/5
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody]Booking booking)
+        public IActionResult Put(int id, [FromBody] Booking booking)
         {
             if (booking == null || booking.Id != id)
             {
                 return BadRequest();
             }
 
-            var modifiedBooking = bookingRepository.Get(id);
+            var modifiedBooking = bookingManager.Get(id);
 
             if (modifiedBooking == null)
             {
@@ -86,7 +80,7 @@ namespace HotelBooking.WebApi.Controllers
             modifiedBooking.IsActive = booking.IsActive;
             modifiedBooking.CustomerId = booking.CustomerId;
 
-            bookingRepository.Edit(modifiedBooking);
+            bookingManager.Edit(modifiedBooking);
             return NoContent();
         }
 
@@ -94,14 +88,13 @@ namespace HotelBooking.WebApi.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            if (bookingRepository.Get(id) == null)
+            if (bookingManager.Get(id) == null)
             {
                 return NotFound();
             }
 
-            bookingRepository.Remove(id);
+            bookingManager.Remove(id);
             return NoContent();
         }
-
     }
 }

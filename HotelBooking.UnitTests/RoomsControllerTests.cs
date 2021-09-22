@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using HotelBooking.Application.Common.Facade;
 using HotelBooking.Core;
 using HotelBooking.WebApi.Controllers;
 using Microsoft.AspNetCore.Mvc;
@@ -17,8 +18,8 @@ namespace HotelBooking.UnitTests
         {
             var rooms = new List<Room>
             {
-                new Room { Id=1, Description="A" },
-                new Room { Id=2, Description="B" },
+                new Room {Id = 1, Description = "A"},
+                new Room {Id = 2, Description = "B"},
             };
 
             // Create fake RoomRepository. 
@@ -45,11 +46,11 @@ namespace HotelBooking.UnitTests
 
             // Integers from 1 to 2 (using a range)
             fakeRoomRepository.Setup(x =>
-            x.Get(It.IsInRange<int>(1, 2, Moq.Range.Inclusive))).Returns(rooms[1]);
+                x.Get(It.IsInRange<int>(1, 2, Moq.Range.Inclusive))).Returns(rooms[1]);
+         
 
-
-            // Create RoomsController
-            controller = new RoomsController(fakeRoomRepository.Object);
+                // Create RoomsController
+                controller = null;
         }
 
         [Fact]

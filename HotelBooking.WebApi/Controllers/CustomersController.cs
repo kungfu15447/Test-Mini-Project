@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using HotelBooking.Application.Customers.Facade;
 using HotelBooking.Core;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,9 +10,9 @@ namespace HotelBooking.WebApi.Controllers
     [Route("[controller]")]
     public class CustomersController : Controller
     {
-        private readonly IRepository<Customer> repository;
+        private readonly ICustomerDomainService repository;
 
-        public CustomersController(IRepository<Customer> repos)
+        public CustomersController(ICustomerDomainService repos)
         {
             repository = repos;
         }

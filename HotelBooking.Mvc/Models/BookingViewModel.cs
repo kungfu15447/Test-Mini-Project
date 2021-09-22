@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using HotelBooking.Application.Bookings.Facade;
+using HotelBooking.Application.Common.Facade;
 using HotelBooking.Core;
 
 namespace HotelBooking.Mvc.Models

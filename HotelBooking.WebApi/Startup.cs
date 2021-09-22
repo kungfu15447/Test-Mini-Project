@@ -1,4 +1,7 @@
-﻿using HotelBooking.Core;
+﻿using HotelBooking.Application.Bookings;
+using HotelBooking.Application.Bookings.Facade;
+using HotelBooking.Application.Common.Facade;
+using HotelBooking.Core;
 using HotelBooking.Infrastructure;
 using HotelBooking.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Builder;

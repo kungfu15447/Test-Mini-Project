@@ -1,5 +1,8 @@
 using System;
 using System.Collections.Generic;
+using HotelBooking.Application.Bookings;
+using HotelBooking.Application.Bookings.Facade;
+using HotelBooking.Application.Common.Facade;
 using HotelBooking.Core;
 using HotelBooking.UnitTests.Fakes;
 using Moq;

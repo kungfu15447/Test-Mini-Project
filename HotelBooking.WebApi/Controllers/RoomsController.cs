@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using HotelBooking.Application.Common.Facade;
+using HotelBooking.Application.Rooms.Facade;
 using HotelBooking.Core;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,9 +12,9 @@ namespace HotelBooking.WebApi.Controllers
     [Route("[controller]")]
     public class RoomsController : Controller
     {
-        private readonly IRepository<Room> repository;
+        private readonly IRoomsDomainService repository;
 
-        public RoomsController(IRepository<Room> repos)
+        public RoomsController(IRoomsDomainService repos)
         {
             repository = repos;
         }

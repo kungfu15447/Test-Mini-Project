@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using HotelBooking.Application.Common.Facade;
 using HotelBooking.Core;
 using Microsoft.EntityFrameworkCore;
 

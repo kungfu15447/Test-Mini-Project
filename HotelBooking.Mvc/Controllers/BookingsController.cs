@@ -1,4 +1,6 @@
 ﻿using System;
+using HotelBooking.Application.Bookings.Facade;
+using HotelBooking.Application.Common.Facade;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;

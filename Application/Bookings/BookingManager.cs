@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using HotelBooking.Application.Bookings.Facade;
+using HotelBooking.Application.Common.Facade;
+using HotelBooking.Core;
 
-namespace HotelBooking.Core
+namespace HotelBooking.Application.Bookings
 {
     public class BookingManager : IBookingManager
     {
@@ -78,5 +81,24 @@ namespace HotelBooking.Core
             return fullyOccupiedDates;
         }
 
+        public IEnumerable<Booking> GetAll()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Booking Get(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Remove(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Edit(Booking modifiedBooking)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
