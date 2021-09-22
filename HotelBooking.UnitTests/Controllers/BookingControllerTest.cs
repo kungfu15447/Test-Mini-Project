@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Xunit;
 
-namespace HotelBooking.UnitTests.ControllerTests
+namespace HotelBooking.UnitTests.Controllers
 {
     public class BookingControllerTest
     {

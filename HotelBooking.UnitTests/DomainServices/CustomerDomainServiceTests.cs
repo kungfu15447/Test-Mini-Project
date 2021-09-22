@@ -1,16 +1,12 @@
-﻿using HotelBooking.Application.Common.Facade;
+﻿using System;
+using HotelBooking.Application.Common.Facade;
 using HotelBooking.Application.Customers;
 using HotelBooking.Application.Customers.Facade;
 using HotelBooking.Core;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 
-namespace HotelBooking.UnitTests
+namespace HotelBooking.UnitTests.DomainServices
 {
     public class CustomerServiceTests
     {
