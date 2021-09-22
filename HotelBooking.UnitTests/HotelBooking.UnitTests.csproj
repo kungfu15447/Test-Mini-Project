@@ -22,4 +22,7 @@
     <ProjectReference Include="..\HotelBooking.Core\HotelBooking.Core.csproj" />
     <ProjectReference Include="..\HotelBooking.WebApi\HotelBooking.WebApi.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="DomainServices" />
+  </ItemGroup>
 </Project>

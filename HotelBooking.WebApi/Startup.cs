@@ -30,7 +30,7 @@ namespace HotelBooking.WebApi
             services.AddScoped<IRepository<Room>, RoomRepository>();
             services.AddScoped<IRepository<Customer>, CustomerRepository>();
             services.AddScoped<IRepository<Booking>, BookingRepository>();
-            services.AddScoped<IBookingManager, BookingManager>();
+            services.AddScoped<IBookingDomainService, BookingDomainService>();
             services.AddTransient<IDbInitializer, DbInitializer>();
 
             services.AddControllers();

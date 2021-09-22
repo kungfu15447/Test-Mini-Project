@@ -4,7 +4,7 @@ using HotelBooking.Core;
 
 namespace HotelBooking.Application.Bookings.Facade
 {
-    public interface IBookingManager
+    public interface IBookingDomainService
     {
         bool CreateBooking(Booking booking);
         int FindAvailableRoom(DateTime startDate, DateTime endDate);

@@ -18,7 +18,7 @@ namespace HotelBooking.IntegrationTests
         // when testing.
 
         SqliteConnection connection;
-        BookingManager bookingManager;
+        BookingDomainService bookingDomainService;
 
         public BookingManagerTests()
         {
@@ -37,7 +37,7 @@ namespace HotelBooking.IntegrationTests
             // Create repositories and BookingManager
             var bookingRepos = new BookingRepository(dbContext);
             var roomRepos = new RoomRepository(dbContext);
-            bookingManager = new BookingManager(bookingRepos, roomRepos);
+            bookingDomainService = new BookingDomainService(bookingRepos, roomRepos);
         }
 
         public void Dispose()
@@ -50,7 +50,7 @@ namespace HotelBooking.IntegrationTests
         public void FindAvailableRoom_RoomNotAvailable_RoomIdIsMinusOne()
         {
             // Act
-            var roomId = bookingManager.FindAvailableRoom(DateTime.Today.AddDays(8), DateTime.Today.AddDays(8));
+            var roomId = bookingDomainService.FindAvailableRoom(DateTime.Today.AddDays(8), DateTime.Today.AddDays(8));
             // Assert
             Assert.Equal(-1, roomId);
         }
