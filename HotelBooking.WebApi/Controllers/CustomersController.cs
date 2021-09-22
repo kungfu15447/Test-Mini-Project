@@ -10,18 +10,18 @@ namespace HotelBooking.WebApi.Controllers
     [Route("[controller]")]
     public class CustomersController : Controller
     {
-        private readonly ICustomerDomainService repository;
+        private readonly ICustomerDomainService _customerService;
 
-        public CustomersController(ICustomerDomainService repos)
+        public CustomersController(ICustomerDomainService customerService)
         {
-            repository = repos;
+            _customerService = customerService;
         }
 
         // GET: api/customers
         [HttpGet]
         public IEnumerable<Customer> Get()
         {
-            return repository.GetAll();
+            return _customerService.GetAll();
         }
 
     }
