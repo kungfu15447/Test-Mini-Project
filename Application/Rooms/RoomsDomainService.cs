@@ -4,7 +4,7 @@ using HotelBooking.Core;
 
 namespace HotelBooking.Application.Rooms
 {
-    class RoomsDomainService : IRoomsDomainService
+    public class RoomsDomainService : IRoomsDomainService
     {
         public IEnumerable<Room> GetAll()
         {
