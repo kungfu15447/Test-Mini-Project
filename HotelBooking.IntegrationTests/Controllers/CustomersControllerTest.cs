@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace HotelBooking.IntegrationTests.Controllers
 {
-    class CustomerControllerTest
+    class CustomersControllerTest
     {
     }
 }
