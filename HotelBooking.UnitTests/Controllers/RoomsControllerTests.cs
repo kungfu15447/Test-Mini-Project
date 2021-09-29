@@ -53,7 +53,6 @@ namespace HotelBooking.UnitTests.Controllers
                 controller = null;
         }
 
-        [Fact]
         public void GetAll_ReturnsListWithCorrectNumberOfRooms()
         {
             // Act
@@ -64,7 +63,6 @@ namespace HotelBooking.UnitTests.Controllers
             Assert.Equal(2, noOfRooms);
         }
 
-        [Fact]
         public void GetById_RoomExists_ReturnsIActionResultWithRoom()
         {
             // Act
@@ -76,7 +74,6 @@ namespace HotelBooking.UnitTests.Controllers
             Assert.InRange<int>(roomId, 1, 2);
         }
 
-        [Fact]
         public void Delete_WhenIdIsLargerThanZero_RemoveIsCalled()
         {
             // Act
@@ -86,7 +83,6 @@ namespace HotelBooking.UnitTests.Controllers
             fakeRoomRepository.Verify(x => x.Remove(1), Times.Once);
         }
 
-        [Fact]
         public void Delete_WhenIdIsLessThanOne_RemoveIsNotCalled()
         {
             // Act
@@ -96,7 +92,6 @@ namespace HotelBooking.UnitTests.Controllers
             fakeRoomRepository.Verify(x => x.Remove(It.IsAny<int>()), Times.Never());
         }
 
-        [Fact]
         public void Delete_WhenIdIsLargerThanTwo_RemoveThrowsException()
         {
             // Instruct the fake Remove method to throw an InvalidOperationException, if a room id that
