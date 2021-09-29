@@ -17,12 +17,14 @@ namespace HotelBooking.Infrastructure.Repositories
 
         public void Add(Room entity)
         {
-            throw new NotImplementedException();
+            db.Room.Add(entity);
+            db.SaveChanges();
         }
 
         public void Edit(Room entity)
         {
-            throw new NotImplementedException();
+            db.Room.Update(entity);
+            db.SaveChanges();
         }
 
         public Room Get(int id)
