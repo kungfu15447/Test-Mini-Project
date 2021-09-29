@@ -1,6 +1,7 @@
 ﻿using HotelBooking.Application.Customers.Facade;
 using HotelBooking.Core;
 using HotelBooking.WebApi.Controllers;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -39,6 +40,38 @@ namespace HotelBooking.UnitTests.Controllers
             //Assert
             Assert.True(customers.Count() == result.Count());
             _customerService.Verify(s => s.GetAll(), Times.Once);
+            _customerService.VerifyNoOtherCalls();
+        }
+
+        [Fact]
+        public void Get_Happy_OkObjectResultIsReturned()
+        {
+            //Assign
+            int id = 1;
+            _customerService.Setup(s => s.Get(id)).Returns(new Customer());
+
+            //Act
+            var result = _customerController.Get(id);
+
+            //Assert
+            Assert.IsType<OkObjectResult>(result);
+            _customerService.Verify(s => s.Get(id), Times.Once);
+            _customerService.VerifyNoOtherCalls();
+        }
+
+        [Fact]
+        public void Get_MethodThrowsArgumentException_BadRequestObjectResultIsReturned()
+        {
+            //Assign
+            int id = 1;
+            _customerService.Setup(s => s.Get(id)).Throws<ArgumentException>();
+
+            //Act
+            var result = _customerController.Get(id);
+
+            //Assert
+            Assert.IsType<BadRequestObjectResult>(result);
+            _customerService.Verify(s => s.Get(id), Times.Once);
             _customerService.VerifyNoOtherCalls();
         }
     }
