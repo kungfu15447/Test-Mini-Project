@@ -78,6 +78,7 @@ namespace HotelBooking.UnitTests
 
             // Act
             int roomId = bookingDomainService.FindAvailableRoom(date, date);
+         
             // Assert
             Assert.NotEqual(-1, roomId);
             bookRepoMock.Verify(r => r.GetAll(), Times.Once);
