@@ -4,7 +4,7 @@ using HotelBooking.Application.Bookings;
 using HotelBooking.Application.Bookings.Facade;
 using HotelBooking.Application.Common.Facade;
 using HotelBooking.Core;
-using HotelBooking.UnitTests.Fakes;
+using Microsoft.AspNetCore.Authorization;
 using Moq;
 using Xunit;
 
@@ -12,7 +12,7 @@ namespace HotelBooking.UnitTests
 {
     public class BookingManagerTests
     {
-        private IBookingManager bookingManager;
+        private IBookingDomainService bookingDomainService;
         private Mock<IRepository<Booking>> bookRepoMock;
         private Mock<IRepository<Room>> roomRepoMock;
 
@@ -20,7 +20,7 @@ namespace HotelBooking.UnitTests
         {
             bookRepoMock = new Mock<IRepository<Booking>>();
             roomRepoMock = new Mock<IRepository<Room>>();
-            bookingManager = new BookingManager(bookRepoMock.Object, roomRepoMock.Object);
+            bookingDomainService = new BookingDomainService(bookRepoMock.Object, roomRepoMock.Object);
         }
 
         [Fact]
@@ -45,7 +45,7 @@ namespace HotelBooking.UnitTests
             roomRepoMock.Setup(r => r.GetAll()).Returns(rooms);
 
             // Act
-            Action act = () => bookingManager.FindAvailableRoom(date, date);
+            Action act = () => bookingDomainService.FindAvailableRoom(date, date);
 
             // Assert
             Assert.Throws<ArgumentException>(act);
@@ -77,7 +77,7 @@ namespace HotelBooking.UnitTests
             roomRepoMock.Setup(r => r.GetAll()).Returns(rooms);
 
             // Act
-            int roomId = bookingManager.FindAvailableRoom(date, date);
+            int roomId = bookingDomainService.FindAvailableRoom(date, date);
             // Assert
             Assert.NotEqual(-1, roomId);
             bookRepoMock.Verify(r => r.GetAll(), Times.Once);
@@ -108,7 +108,7 @@ namespace HotelBooking.UnitTests
             roomRepoMock.Setup(r => r.GetAll()).Returns(rooms);
 
             // Act
-            int roomId = bookingManager.FindAvailableRoom(date, date);
+            int roomId = bookingDomainService.FindAvailableRoom(date, date);
 
             //Assert
             Assert.Equal(roomId, -1);
@@ -143,7 +143,7 @@ namespace HotelBooking.UnitTests
             var booking = new Booking() { StartDate=bookingStartDate, EndDate=bookingEndDate };
 
             //Act
-            var result = bookingManager.CreateBooking(booking);
+            var result = bookingDomainService.CreateBooking(booking);
 
             //Assert
             Assert.True(result);
@@ -177,7 +177,7 @@ namespace HotelBooking.UnitTests
             var booking = new Booking() { StartDate = bookingStartDate, EndDate = bookingEndDate };
 
             //Act
-            var result = bookingManager.CreateBooking(booking);
+            var result = bookingDomainService.CreateBooking(booking);
 
             //Assert
             Assert.False(result);
@@ -209,7 +209,7 @@ namespace HotelBooking.UnitTests
             Booking booking = null;
 
             //Act
-            Action act = () => bookingManager.CreateBooking(booking);
+            Action act = () => bookingDomainService.CreateBooking(booking);
 
             //Assert
             Assert.Throws<ArgumentException>(act);
@@ -239,7 +239,7 @@ namespace HotelBooking.UnitTests
             roomRepoMock.Setup(r => r.GetAll()).Returns(rooms);
 
             //Act
-            var fullyOccupiedDates = bookingManager.GetFullyOccupiedDates(start, end);
+            var fullyOccupiedDates = bookingDomainService.GetFullyOccupiedDates(start, end);
 
             //Assert
             Assert.True(fullyOccupiedDates.Count == 0);
@@ -270,7 +270,7 @@ namespace HotelBooking.UnitTests
             roomRepoMock.Setup(r => r.GetAll()).Returns(rooms);
 
             //Act
-            Action act = () => bookingManager.GetFullyOccupiedDates(end, start);
+            Action act = () => bookingDomainService.GetFullyOccupiedDates(end, start);
 
             //Assert
             Assert.Throws<ArgumentException>(act);
@@ -301,7 +301,7 @@ namespace HotelBooking.UnitTests
             roomRepoMock.Setup(r => r.GetAll()).Returns(rooms);
 
             //Act
-            var fullyOccupiedDates = bookingManager.GetFullyOccupiedDates(start, end);
+            var fullyOccupiedDates = bookingDomainService.GetFullyOccupiedDates(start, end);
 
             //Assert
             Assert.True(fullyOccupiedDates.Count > 0);
@@ -311,5 +311,80 @@ namespace HotelBooking.UnitTests
             roomRepoMock.VerifyNoOtherCalls();
         }
 
+        [Fact]
+        public void GetAll_MethodInvocation_CallsRepo()
+        {
+            // Arrange
+            DateTime start = DateTime.Today.AddDays(10);
+            DateTime end = DateTime.Today.AddDays(20);
+            List<Booking> bookings = new List<Booking>
+            {
+                new Booking { Id=1, StartDate=start, EndDate=end, IsActive=true, CustomerId=1, RoomId=1 },
+                new Booking { Id=2, StartDate=start, EndDate=end, IsActive=true, CustomerId=2, RoomId=2 },
+            };
+            bookRepoMock.Setup(r => r.GetAll()).Returns(bookings);
+            
+            // Act
+            bookingDomainService.GetAll();
+
+            // Assert
+            bookRepoMock.Verify(r => r.GetAll(), Times.Once);
+            bookRepoMock.VerifyNoOtherCalls();
+        }
+        
+        [Fact]
+        public void Get_MethodInvocation_CallsRepo()
+        {
+            // Arrange
+            int id = 2;
+            DateTime start = DateTime.Today.AddDays(10);
+            DateTime end = DateTime.Today.AddDays(20);
+            List<Booking> bookings = new List<Booking>
+            {
+                new Booking { Id=1, StartDate=start, EndDate=end, IsActive=true, CustomerId=1, RoomId=1 },
+                new Booking { Id=2, StartDate=start, EndDate=end, IsActive=true, CustomerId=2, RoomId=2 },
+            };
+            bookRepoMock.Setup(r => r.Get(id)).Returns(bookings[1]);
+            
+            // Act
+            bookingDomainService.Get(id);
+
+            // Assert
+            bookRepoMock.Verify(r => r.Get(id), Times.Once);
+            bookRepoMock.VerifyNoOtherCalls();
+        }
+        
+        [Fact]
+        public void Edit_MethodInvocation_CallsRepo()
+        {
+            // Arrange
+            int id = 2;
+            DateTime start = DateTime.Today.AddDays(10);
+            DateTime end = DateTime.Today.AddDays(20);
+
+            var book = new Booking {Id = 1, StartDate = start, EndDate = end, IsActive = true, CustomerId = 1, RoomId = 1};
+            bookRepoMock.Setup(r => r.Edit(book));
+            
+            // Act
+            bookingDomainService.Edit(book);
+
+            // Assert
+            bookRepoMock.Verify(r => r.Edit(book), Times.Once);
+            bookRepoMock.VerifyNoOtherCalls();
+        }
+        
+        [Fact]
+        public void Delete_MethodInvocation_CallsRepo()
+        {
+            int id = 2;
+            bookRepoMock.Setup(r => r.Remove(id));
+            
+            // Act
+            bookingDomainService.Remove(id);
+
+            // Assert
+            bookRepoMock.Verify(r => r.Remove(id), Times.Once);
+            bookRepoMock.VerifyNoOtherCalls();
+        }
     }
 }

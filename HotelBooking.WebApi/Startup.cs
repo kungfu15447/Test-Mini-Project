@@ -1,6 +1,8 @@
 ﻿using HotelBooking.Application.Bookings;
 using HotelBooking.Application.Bookings.Facade;
 using HotelBooking.Application.Common.Facade;
+using HotelBooking.Application.Customers;
+using HotelBooking.Application.Customers.Facade;
 using HotelBooking.Core;
 using HotelBooking.Infrastructure;
 using HotelBooking.Infrastructure.Repositories;
@@ -30,7 +32,8 @@ namespace HotelBooking.WebApi
             services.AddScoped<IRepository<Room>, RoomRepository>();
             services.AddScoped<IRepository<Customer>, CustomerRepository>();
             services.AddScoped<IRepository<Booking>, BookingRepository>();
-            services.AddScoped<IBookingManager, BookingManager>();
+            services.AddScoped<IBookingDomainService, BookingDomainService>();
+            services.AddScoped<ICustomerDomainService, CustomerDomainService>();
             services.AddTransient<IDbInitializer, DbInitializer>();
 
             services.AddControllers();

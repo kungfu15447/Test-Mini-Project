@@ -10,25 +10,25 @@ namespace HotelBooking.WebApi.Controllers
     [Route("[controller]")]
     public class BookingsController : Controller
     {
-        private IBookingManager bookingManager;
+        private IBookingDomainService bookingDomainService;
 
-        public BookingsController(IBookingManager manager)
+        public BookingsController(IBookingDomainService domainService)
         {
-            bookingManager = manager;
+            bookingDomainService = domainService;
         }
 
         // GET: api/bookings
         [HttpGet(Name = "GetBookings")]
         public IEnumerable<Booking> Get()
         {
-            return bookingManager.GetAll();
+            return bookingDomainService.GetAll();
         }
 
         // GET api/bookings/5
         [HttpGet("{id}", Name = "GetBooking")]
         public IActionResult Get(int id)
         {
-            var item = bookingManager.Get(id);
+            var item = bookingDomainService.Get(id);
             if (item == null)
             {
                 return NotFound();
@@ -40,22 +40,21 @@ namespace HotelBooking.WebApi.Controllers
         // POST api/bookings
         [HttpPost]
         public IActionResult Post([FromBody] Booking booking)
+        
         {
             if (booking == null)
             {
                 return BadRequest();
             }
 
-            bool created = bookingManager.CreateBooking(booking);
+            bool created = bookingDomainService.CreateBooking(booking);
 
             if (created)
             {
                 return CreatedAtRoute("GetBookings", null);
             }
-            else
-            {
-                return Conflict("The booking could not be created. All rooms are occupied. Please try another period.");
-            }
+
+            return Conflict("The booking could not be created. All rooms are occupied. Please try another period.");
         }
 
         // PUT api/bookings/5
@@ -67,7 +66,7 @@ namespace HotelBooking.WebApi.Controllers
                 return BadRequest();
             }
 
-            var modifiedBooking = bookingManager.Get(id);
+            var modifiedBooking = bookingDomainService.Get(id);
 
             if (modifiedBooking == null)
             {
@@ -80,7 +79,7 @@ namespace HotelBooking.WebApi.Controllers
             modifiedBooking.IsActive = booking.IsActive;
             modifiedBooking.CustomerId = booking.CustomerId;
 
-            bookingManager.Edit(modifiedBooking);
+            bookingDomainService.Edit(modifiedBooking);
             return NoContent();
         }
 
@@ -88,12 +87,12 @@ namespace HotelBooking.WebApi.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            if (bookingManager.Get(id) == null)
+            if (bookingDomainService.Get(id) == null)
             {
                 return NotFound();
             }
 
-            bookingManager.Remove(id);
+            bookingDomainService.Remove(id);
             return NoContent();
         }
     }
