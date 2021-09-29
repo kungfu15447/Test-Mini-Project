@@ -43,7 +43,12 @@ namespace HotelBooking.Infrastructure.Repositories
         {
             // The Single method below throws an InvalidOperationException
             // if there is not exactly one room with the specified Id.
-            var room = db.Room.Single(r => r.Id == id);
+            var room = db.Room.FirstOrDefault(r => r.Id == id);
+            
+            if (room is null) {
+                throw new InvalidOperationException("Room does not exist");
+            }
+
             db.Room.Remove(room);
             db.SaveChanges();
         }
