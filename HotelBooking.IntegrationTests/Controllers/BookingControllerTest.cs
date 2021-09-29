@@ -13,7 +13,6 @@ namespace HotelBooking.IntegrationTests.Controllers
     public class BookingControllerTest : IClassFixture<DatabaseFixture>
     {
         private BookingsController controller;
-
         public BookingControllerTest(DatabaseFixture dbFixture)
         {
             var ctx = dbFixture.Context;

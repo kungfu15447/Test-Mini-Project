@@ -31,10 +31,10 @@ namespace HotelBooking.WebApi.Controllers
             try
             {
                 var customer = _customerService.Get(id);
-                return new OkObjectResult(customer);
+                return Ok(customer);
             }catch(ArgumentException ex)
             {
-                return new BadRequestObjectResult(ex.Message);
+                return BadRequest(ex.Message);
             }
         }
 
