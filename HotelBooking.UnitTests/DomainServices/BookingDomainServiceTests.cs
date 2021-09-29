@@ -78,6 +78,7 @@ namespace HotelBooking.UnitTests
 
             // Act
             int roomId = bookingDomainService.FindAvailableRoom(date, date);
+         
             // Assert
             Assert.NotEqual(-1, roomId);
             bookRepoMock.Verify(r => r.GetAll(), Times.Once);
@@ -358,7 +359,6 @@ namespace HotelBooking.UnitTests
         public void Edit_MethodInvocation_CallsRepo()
         {
             // Arrange
-            int id = 2;
             DateTime start = DateTime.Today.AddDays(10);
             DateTime end = DateTime.Today.AddDays(20);
 

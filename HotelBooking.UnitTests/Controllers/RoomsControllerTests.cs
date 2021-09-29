@@ -41,7 +41,6 @@ namespace HotelBooking.UnitTests.Controllers
             Assert.Equal(2, noOfRooms);
             mockService.Verify(s => s.GetAll(), Times.Once);
         }
-
         [Fact]
         public void GetById_RoomExists_ReturnsIActionResultWithRoom()
         {
@@ -62,7 +61,6 @@ namespace HotelBooking.UnitTests.Controllers
             Assert.True(room.Id == id);
             Assert.InRange<int>(room.Id, 1, 2);
         }
-
         [Fact]
         public void Delete_WhenIdIsLargerThanZero_RemoveIsCalled()
         {
@@ -77,7 +75,6 @@ namespace HotelBooking.UnitTests.Controllers
             mockService.Verify(s => s.Remove(id), Times.Once);
             
         }
-
         [Fact]
         public void Delete_WhenIdIsLessThanOne_RemoveIsNotCalled()
         {
@@ -85,10 +82,11 @@ namespace HotelBooking.UnitTests.Controllers
             var id = 0;
             
             // Act
-            controller.Delete(id);
+           var result = controller.Delete(id);
 
             // Assert
             mockService.Verify(s => s.Remove(id), Times.Never);
+            Assert.IsType<BadRequestResult>(result);
         }
 
         
