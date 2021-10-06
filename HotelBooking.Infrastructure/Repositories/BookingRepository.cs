@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using HotelBooking.Application.Common.Facade;
 using HotelBooking.Core;
@@ -29,7 +30,17 @@ namespace HotelBooking.Infrastructure.Repositories
 
         public Booking Get(int id)
         {
-            return db.Booking.Include(b => b.Customer).Include(b => b.Room).FirstOrDefault(b => b.Id == id);
+            var booking = db.Booking
+                .Include(b => b.Customer)
+                .Include(b => b.Room)
+                .FirstOrDefault(b => b.Id == id);
+            
+            if (booking is null)
+            {
+                throw new InvalidOperationException("Booking Not found");
+            }
+
+            return booking;
         }
 
         public IEnumerable<Booking> GetAll()

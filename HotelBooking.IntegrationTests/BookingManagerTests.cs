@@ -10,7 +10,7 @@ using Xunit;
 
 namespace HotelBooking.IntegrationTests
 {
-    public class BookingManagerTests  :  IClassFixture<DatabaseFixture>
+    public class BookingManagerTests:  IClassFixture<DatabaseFixture>
     {
         // This test class uses a separate Sqlite in-memory database. While the
         // .NET Core built-in in-memory database is not a relational database,

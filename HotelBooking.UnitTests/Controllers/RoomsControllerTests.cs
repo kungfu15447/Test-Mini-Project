@@ -61,6 +61,7 @@ namespace HotelBooking.UnitTests.Controllers
             Assert.True(room.Id == id);
             Assert.InRange<int>(room.Id, 1, 2);
         }
+        
         [Fact]
         public void Delete_WhenIdIsLargerThanZero_RemoveIsCalled()
         {
@@ -75,6 +76,7 @@ namespace HotelBooking.UnitTests.Controllers
             mockService.Verify(s => s.Remove(id), Times.Once);
             
         }
+        
         [Fact]
         public void Delete_WhenIdIsLessThanOne_RemoveIsNotCalled()
         {

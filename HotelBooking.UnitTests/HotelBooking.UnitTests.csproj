@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\HotelBooking.Core\HotelBooking.Core.csproj" />
+    <ProjectReference Include="..\HotelBooking.IntegrationTests\HotelBooking.IntegrationTests.csproj" />
     <ProjectReference Include="..\HotelBooking.WebApi\HotelBooking.WebApi.csproj" />
   </ItemGroup>
 </Project>
