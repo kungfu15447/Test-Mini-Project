@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <SpecFlowFeatureFiles Include="CreateBookingDomainExamples.feature">
+        <CodeBehindFile>DomainServices\CreateBookingDomainExamples.feature.cs</CodeBehindFile>
+        <Visible>true</Visible>
+      </SpecFlowFeatureFiles>
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="SpecFlow" Version="3.9.22" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Application\Application.csproj" />
+      <ProjectReference Include="..\HotelBooking.Core\HotelBooking.Core.csproj" />
+      <ProjectReference Include="..\HotelBooking.Infrastructure\HotelBooking.Infrastructure.csproj" />
+      <ProjectReference Include="..\HotelBooking.WebApi\HotelBooking.WebApi.csproj" />
+    </ItemGroup>
+
+</Project>

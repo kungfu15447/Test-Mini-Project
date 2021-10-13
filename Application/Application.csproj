@@ -9,4 +9,9 @@
       <ProjectReference Include="..\HotelBooking.Core\HotelBooking.Core.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="SpecFlow" Version="3.9.22" />
+      <PackageReference Include="SpecFlow.Tools.MsBuild.Generation" Version="3.9.22" />
+    </ItemGroup>
+
 </Project>

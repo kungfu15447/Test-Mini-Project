@@ -64,6 +64,7 @@ namespace HotelBooking.UnitTests.DomainServices
             // Act
             var roomReturned = _roomService.Get(room.Id);
             
+            // Assert
             Assert.Equal(room, roomReturned);
             _mockRoomRepo.Verify(r => r.Get(room.Id));
             _mockRoomRepo.VerifyNoOtherCalls();
@@ -80,9 +81,11 @@ namespace HotelBooking.UnitTests.DomainServices
             // Act
             var roomReturned = _roomService.Get(room.Id);
             
+            // Assert
             Assert.True(roomReturned == null);
             _mockRoomRepo.Verify(r => r.Get(room.Id));
             _mockRoomRepo.VerifyNoOtherCalls();
         }
+        
     }
 }

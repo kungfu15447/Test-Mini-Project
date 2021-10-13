@@ -26,7 +26,7 @@ namespace HotelBooking.Application.Bookings
                 throw new ArgumentException("Booking is null");
             }
             int roomId = FindAvailableRoom(booking.StartDate, booking.EndDate);
-
+            
             if (roomId >= 0)
             {
                 booking.RoomId = roomId;
