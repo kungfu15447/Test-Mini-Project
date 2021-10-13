@@ -4,7 +4,6 @@ using HotelBooking.Application.Bookings;
 using HotelBooking.Application.Bookings.Facade;
 using HotelBooking.Application.Common.Facade;
 using HotelBooking.Core;
-using Microsoft.AspNetCore.Authorization;
 using Moq;
 using Xunit;
 
@@ -49,10 +48,6 @@ namespace HotelBooking.UnitTests
 
             // Assert
             Assert.Throws<ArgumentException>(act);
-            bookRepoMock.Verify(r => r.GetAll(), Times.Never);
-            roomRepoMock.Verify(r => r.GetAll(), Times.Never);
-            bookRepoMock.VerifyNoOtherCalls();
-            roomRepoMock.VerifyNoOtherCalls();
         }
 
         [Fact]
@@ -81,10 +76,6 @@ namespace HotelBooking.UnitTests
          
             // Assert
             Assert.NotEqual(-1, roomId);
-            bookRepoMock.Verify(r => r.GetAll(), Times.Once);
-            roomRepoMock.Verify(r => r.GetAll(), Times.Once);
-            bookRepoMock.VerifyNoOtherCalls();
-            roomRepoMock.VerifyNoOtherCalls();
         }
 
         [Fact]
@@ -113,10 +104,6 @@ namespace HotelBooking.UnitTests
 
             //Assert
             Assert.Equal(roomId, -1);
-            bookRepoMock.Verify(r => r.GetAll(), Times.Once);
-            roomRepoMock.Verify(r => r.GetAll(), Times.Once);
-            bookRepoMock.VerifyNoOtherCalls();
-            roomRepoMock.VerifyNoOtherCalls();
         }
 
         [Fact]
@@ -148,9 +135,7 @@ namespace HotelBooking.UnitTests
 
             //Assert
             Assert.True(result);
-            bookRepoMock.Verify(r => r.Add(booking), Times.Once);
-            bookRepoMock.Verify(r => r.GetAll(), Times.Once);
-            bookRepoMock.VerifyNoOtherCalls();
+            bookRepoMock.Verify(b => b.Add(booking), Times.Once);
         }
 
         [Fact]
@@ -182,9 +167,6 @@ namespace HotelBooking.UnitTests
 
             //Assert
             Assert.False(result);
-            bookRepoMock.Verify(r => r.Add(booking), Times.Never);
-            bookRepoMock.Verify(r => r.GetAll(), Times.Once);
-            bookRepoMock.VerifyNoOtherCalls();
         }
 
         [Fact]
@@ -216,7 +198,6 @@ namespace HotelBooking.UnitTests
             Assert.Throws<ArgumentException>(act);
             bookRepoMock.Verify(r => r.Add(booking), Times.Never);
             bookRepoMock.Verify(r => r.GetAll(), Times.Never);
-            bookRepoMock.VerifyNoOtherCalls();
         }
 
         [Fact]
@@ -244,10 +225,6 @@ namespace HotelBooking.UnitTests
 
             //Assert
             Assert.True(fullyOccupiedDates.Count == 0);
-            bookRepoMock.Verify(r => r.GetAll(), Times.Once);
-            roomRepoMock.Verify(r => r.GetAll(), Times.Once);
-            bookRepoMock.VerifyNoOtherCalls();
-            roomRepoMock.VerifyNoOtherCalls();
         }
 
         [Fact]
@@ -275,10 +252,6 @@ namespace HotelBooking.UnitTests
 
             //Assert
             Assert.Throws<ArgumentException>(act);
-            bookRepoMock.Verify(r => r.GetAll(), Times.Never);
-            roomRepoMock.Verify(r => r.GetAll(), Times.Never);
-            bookRepoMock.VerifyNoOtherCalls();
-            roomRepoMock.VerifyNoOtherCalls();
         }
 
         [Fact]
@@ -306,10 +279,6 @@ namespace HotelBooking.UnitTests
 
             //Assert
             Assert.True(fullyOccupiedDates.Count > 0);
-            bookRepoMock.Verify(r => r.GetAll(), Times.Once);
-            roomRepoMock.Verify(r => r.GetAll(), Times.Once);
-            bookRepoMock.VerifyNoOtherCalls();
-            roomRepoMock.VerifyNoOtherCalls();
         }
 
         [Fact]
