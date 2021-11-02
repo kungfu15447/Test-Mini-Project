@@ -14,19 +14,122 @@ namespace HotelBooking.UnitTests
         private IBookingDomainService bookingDomainService;
         private Mock<IRepository<Booking>> bookRepoMock;
         private Mock<IRepository<Room>> roomRepoMock;
+        private Mock<IDateTimeService> dateTimeMock;
+        private readonly DateTime today;
 
         public BookingManagerTests()
         {
+            today = new DateTime(2021, 11, 1);
+            
             bookRepoMock = new Mock<IRepository<Booking>>();
             roomRepoMock = new Mock<IRepository<Room>>();
-            bookingDomainService = new BookingDomainService(bookRepoMock.Object, roomRepoMock.Object);
+            dateTimeMock = new Mock<IDateTimeService>();
+            
+            dateTimeMock.Setup(s => s.Today).Returns(today);
+            
+            bookingDomainService = new BookingDomainService(bookRepoMock.Object, roomRepoMock.Object, dateTimeMock.Object);
         }
+
+        #region New
+        
+        [Fact]
+        public void CreateBooking_StartDateBeforeToday_ThrowsArgumentException()
+        {
+            // Arrange
+            var startBooking = today.AddDays(-1);
+            var endBooking = today.AddDays(1);
+            var booking = new Booking {StartDate = startBooking, EndDate = endBooking};
+
+            // Act
+            Action act = () => bookingDomainService.CreateBooking(booking);
+            
+            // Assert
+            Assert.Throws<ArgumentException>(act);
+        }
+        
+        [Fact]
+        public void CreateBooking_StartDateAfterEndDate_ThrowsArgumentException()
+        {
+            // Arrange
+            var startBooking = today.AddDays(1);
+            var endBooking = today.AddDays(-1);
+            var booking = new Booking {StartDate = startBooking, EndDate = endBooking};
+
+            // Act
+            Action act = () => bookingDomainService.CreateBooking(booking);
+            
+            // Assert
+            Assert.Throws<ArgumentException>(act);
+        }
+        
+        [Theory, MemberData(nameof(BorderValueData))]
+        public void CreateBooking_BorderValues_CreatesOrNot(DateTime bookingStart, DateTime bookingEnd, bool result)
+        {
+            // Arrange
+            SetUpForBorderValueTest();
+
+            // Act
+            bool bookingCreated = bookingDomainService.CreateBooking(new Booking { StartDate = bookingStart, EndDate = bookingEnd});
+         
+            // Assert
+            Assert.Equal(result, bookingCreated);
+        }
+        
+        public static readonly object[][] BorderValueData =
+        {
+            new object[] { new DateTime(2021, 11, 9), new DateTime(2021, 11, 11), false},
+            new object[] { new DateTime(2021, 11, 11), new DateTime(2021, 11, 14), true},
+            new object[] { new DateTime(2021, 11, 11), new DateTime(2021, 11, 15), false},
+        };
+
+        private void SetUpForBorderValueTest()
+        {
+            DateTime availableRoomPeriodStart1 = today.AddDays(4);
+            DateTime availableRoomPeriodEnd1 = today.AddDays(9);
+            DateTime availableRoomPeriodStart2 = today.AddDays(14);
+            DateTime availableRoomPeriodEnd2 = today.AddDays(19);
+
+            List<Booking> bookings = new List<Booking>
+            {
+                new Booking
+                {
+                    Id = 1, StartDate = availableRoomPeriodStart1, EndDate = availableRoomPeriodEnd1, IsActive = true,
+                    CustomerId = 1, RoomId = 1
+                },
+                new Booking
+                {
+                    Id = 2, StartDate = availableRoomPeriodStart1, EndDate = availableRoomPeriodEnd1, IsActive = true,
+                    CustomerId = 2, RoomId = 2
+                },
+                new Booking
+                {
+                    Id = 1, StartDate = availableRoomPeriodStart2, EndDate = availableRoomPeriodEnd2, IsActive = true,
+                    CustomerId = 1, RoomId = 1
+                },
+                new Booking
+                {
+                    Id = 2, StartDate = availableRoomPeriodStart2, EndDate = availableRoomPeriodEnd2, IsActive = true,
+                    CustomerId = 2, RoomId = 2
+                },
+            };
+            List<Room> rooms = new List<Room>
+            {
+                new Room {Id = 1, Description = "A"},
+                new Room {Id = 2, Description = "B"},
+            };
+
+            bookRepoMock.Setup(r => r.GetAll()).Returns(bookings);
+            roomRepoMock.Setup(r => r.GetAll()).Returns(rooms);
+        }
+
+        #endregion
+
 
         [Fact]
         public void FindAvailableRoom_StartDateNotInTheFuture_ThrowsArgumentException()
         {
             // Arrange
-            DateTime date = DateTime.Today;
+            DateTime date = DateTime.Today.AddDays(-10);
             DateTime start = DateTime.Today.AddDays(10);
             DateTime end = DateTime.Today.AddDays(20);
             List<Booking> bookings = new List<Booking>

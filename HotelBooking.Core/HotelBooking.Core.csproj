@@ -7,10 +7,4 @@
   <ItemGroup>
     <Folder Include="Entities\" />
   </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="SpecFlow" Version="3.9.22" />
-    <PackageReference Include="SpecFlow.Tools.MsBuild.Generation" Version="3.9.22" />
-    <PackageReference Include="SpecFlow.xUnit" Version="3.9.22" />
-  </ItemGroup>
 </Project>

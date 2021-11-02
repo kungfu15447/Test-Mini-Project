@@ -26,7 +26,8 @@ namespace HotelBooking.IntegrationTests
             // Create repositories and BookingManager
             var bookingRepos = new BookingRepository(ctx);
             var roomRepos = new RoomRepository(ctx);
-            bookingDomainService = new BookingDomainService(bookingRepos, roomRepos);
+            var dateTime = new DateTimeService();
+            bookingDomainService = new BookingDomainService(bookingRepos, roomRepos, dateTime);
         }
 
         [Fact]

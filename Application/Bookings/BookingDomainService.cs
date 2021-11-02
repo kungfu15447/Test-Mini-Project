@@ -11,12 +11,14 @@ namespace HotelBooking.Application.Bookings
     {
         private IRepository<Booking> _bookingRepository;
         private readonly IRepository<Room> _roomRepository;
+        private readonly IDateTimeService _dateTime;
 
         // Constructor injection
-        public BookingDomainService(IRepository<Booking> bookingRepository, IRepository<Room> roomRepository)
+        public BookingDomainService(IRepository<Booking> bookingRepository, IRepository<Room> roomRepository, IDateTimeService dateTime)
         {
             _bookingRepository = bookingRepository;
             _roomRepository = roomRepository;
+            _dateTime = dateTime;
         }
 
         public bool CreateBooking(Booking booking)
@@ -25,8 +27,9 @@ namespace HotelBooking.Application.Bookings
             {
                 throw new ArgumentException("Booking is null");
             }
+
             int roomId = FindAvailableRoom(booking.StartDate, booking.EndDate);
-            
+
             if (roomId >= 0)
             {
                 booking.RoomId = roomId;
@@ -42,7 +45,7 @@ namespace HotelBooking.Application.Bookings
 
         public int FindAvailableRoom(DateTime startDate, DateTime endDate)
         {
-            if (startDate <= DateTime.Today || startDate > endDate)
+            if (startDate <= _dateTime.Today || startDate > endDate)
                 throw new ArgumentException("The start date cannot be in the past or later than the end date.");
 
             var activeBookings = _bookingRepository.GetAll().Where(b => b.IsActive);
@@ -55,6 +58,7 @@ namespace HotelBooking.Application.Bookings
                     return room.Id;
                 }
             }
+
             return -1;
         }
 
@@ -72,12 +76,13 @@ namespace HotelBooking.Application.Bookings
                 for (DateTime d = startDate; d <= endDate; d = d.AddDays(1))
                 {
                     var noOfBookings = from b in bookings
-                                       where b.IsActive && d >= b.StartDate && d <= b.EndDate
-                                       select b;
+                        where b.IsActive && d >= b.StartDate && d <= b.EndDate
+                        select b;
                     if (noOfBookings.Count() >= noOfRooms)
                         fullyOccupiedDates.Add(d);
                 }
             }
+
             return fullyOccupiedDates;
         }
 
@@ -93,7 +98,6 @@ namespace HotelBooking.Application.Bookings
 
         public void Remove(int id)
         {
-            
             _bookingRepository.Remove(id);
         }
 
@@ -101,5 +105,15 @@ namespace HotelBooking.Application.Bookings
         {
             _bookingRepository.Edit(modifiedBooking);
         }
+    }
+
+    public interface IDateTimeService
+    {
+        DateTime Today { get; }
+    }
+
+    public class DateTimeService : IDateTimeService
+    {
+        public DateTime Today => DateTime.Today;
     }
 }
