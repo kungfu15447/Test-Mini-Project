@@ -25,6 +25,11 @@ namespace HotelBooking.Application.Specs.Steps
         private bool _result;
         private Exception _thrown;
 
+
+        private DateTime _before = new DateTime(2021, 11, 4);
+        private DateTime _occupied = new DateTime(2021, 11, 5);
+        private DateTime _after = new DateTime(2021, 11, 11);
+
         public CreateBookingStepDefinitions(ScenarioContext scenarioContext)
         {
             _scenarioContext = scenarioContext;
@@ -44,8 +49,6 @@ namespace HotelBooking.Application.Specs.Steps
 
             DateTime availableRoomPeriodStart1 = new DateTime(2021, 11, 5);
             DateTime availableRoomPeriodEnd1 = new DateTime(2021, 11, 10);
-            DateTime availableRoomPeriodStart2 = new DateTime(2021, 11, 15);
-            DateTime availableRoomPeriodEnd2 = new DateTime(2021, 11, 20);
 
             List<Booking> bookings = new List<Booking>
             {
@@ -58,17 +61,7 @@ namespace HotelBooking.Application.Specs.Steps
                 {
                     Id = 2, StartDate = availableRoomPeriodStart1, EndDate = availableRoomPeriodEnd1, IsActive = true,
                     CustomerId = 2, RoomId = 2
-                },
-                new Booking
-                {
-                    Id = 1, StartDate = availableRoomPeriodStart2, EndDate = availableRoomPeriodEnd2, IsActive = true,
-                    CustomerId = 1, RoomId = 1
-                },
-                new Booking
-                {
-                    Id = 2, StartDate = availableRoomPeriodStart2, EndDate = availableRoomPeriodEnd2, IsActive = true,
-                    CustomerId = 2, RoomId = 2
-                },
+                }
             };
             List<Room> rooms = new List<Room>
             {
@@ -86,19 +79,81 @@ namespace HotelBooking.Application.Specs.Steps
                 new BookingDomainService(_bookRepoMock.Object, _roomRepoMock.Object, _dateTimeMock.Object);
         }
 
+        #region MyRegion
 
-        [Given(@"the booking should start at '(.*)'")]
-        public void GivenTheBookingShouldStartAt(string startAt)
+        [Given(@"the booking period starts before today")]
+        public void GivenTheBookingPeriodStartsBeforeToday()
         {
-            _bookingStart = DateTime.Parse(startAt);
+            _bookingStart = new DateTime(2021, 10, 1);
+            _bookingEnd = new DateTime(2021, 11, 14);
         }
 
-        [Given(@"booking should end at '(.*)'")]
-        public void GivenBookingShouldEndAt(string endAt)
+        [Then(@"booking not placed and exception is thrown")]
+        public void ThenBookingNotPlacedAndExceptionIsThrown()
         {
-            _bookingEnd = DateTime.Parse(endAt);
+            if (_thrown is null)
+            {
+                Assert.True(false);
+            }
+
+            Assert.IsType<ArgumentException>(_thrown);
         }
 
+        [Given(@"the booking period is starts before it ends")]
+        public void GivenTheBookingPeriodIsStartsBeforeItEnds()
+        {
+            _bookingStart = new DateTime(2021, 11, 14);
+            _bookingEnd = new DateTime(2021, 11, 11);
+        }
+
+        [Given(@"the booking starts before an occupied period")]
+        public void GivenTheBookingStartsBeforeAOccupiedPeriod()
+        {
+            _bookingStart = _before;
+        }
+
+        [Given(@"the boooking ends before an occupied period")]
+        public void GivenTheBoookingEndsBeforeAOccupiedPeriod()
+        {
+            _bookingEnd = _before;
+        }
+
+        [Then(@"it should be created successfully")]
+        public void ThenIsShouldBeCreatedSuccessfully()
+        {
+            Assert.True(_result);
+        }
+
+        [Given(@"the booking starts after an occupied period")]
+        public void GivenTheBookingStartsAfterAOccupiedPeriod()
+        {
+            _bookingStart = _after;
+        }
+
+        [Given(@"the booking ends after an occupied period")]
+        public void GivenTheBoookingEndsAfterAOccupiedPeriod()
+        {
+            _bookingEnd = _after;
+        }
+
+        [Then(@"it should not be created")]
+        public void ThenItShouldNotBeCreated()
+        {
+            Assert.False(_result);
+        }
+
+        [Given(@"the booking ends in an occupied period")]
+        public void GivenTheBookingEndsInAnOccupiedPeriod()
+        {
+            _bookingStart = _occupied;
+        }
+
+        [Given(@"the booking starts in an occupied period")]
+        public void GivenTheBookingStartsInAnOccupiedPeriod()
+        {
+            _bookingStart = _occupied;
+        }
+        
         [When(@"the booking is placed")]
         public void WhenTheBookingIsPlaced()
         {
@@ -114,8 +169,24 @@ namespace HotelBooking.Application.Specs.Steps
             }
         }
 
+        #endregion
+
+
+/*        
+        [Given(@"the booking should start at '(.*)'")]
+        public void GivenTheBookingShouldStartAt(string startAt)
+        {
+            _bookingStart = DateTime.Parse(startAt);
+        }
+
+        [Given(@"booking should end at '(.*)'")]
+        public void GivenBookingShouldEndAt(string endAt)
+        {
+            _bookingEnd = DateTime.Parse(endAt);
+        }
+
         [Then(@"is should be created in the system, '(.*)'")]
-        public void ThenIsShouldBeCreatedInTheSystemFalse(bool result)
+        public void ThenIsShouldBeCreatedInTheSystem(bool result)
         {
             if (_thrown != null)
             {
@@ -124,30 +195,6 @@ namespace HotelBooking.Application.Specs.Steps
 
             Assert.Equal(_result, result);
         }
-
-        [Given(@"the booking period starts before today")]
-        public void GivenTheBookingPeriodStartsBeforeToday()
-        {
-            
-            _bookingStart = new DateTime(2021, 10, 1);
-            _bookingEnd = new DateTime(2021, 11, 14);
-        }
-
-        [Then(@"booking not placed and exception is thrown")]
-        public void ThenBookingNotPlacedAndExceptionIsThrown()
-        {
-            if (_thrown is null)
-            {
-                Assert.True(false);
-            }
-            Assert.IsType<ArgumentException>(_thrown);
-        }
-
-        [Given(@"the booking period is starts before it ends")]
-        public void GivenTheBookingPeriodIsStartsBeforeItEnds()
-        {
-            _bookingStart = new DateTime(2021, 11, 14);
-            _bookingEnd = new DateTime(2021, 11, 11);
-        }
+        */
     }
 }
